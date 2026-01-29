@@ -2,11 +2,6 @@ import java.util.Scanner;
 
 public class Kluso {
     public static void main(String[] args) {
-        String oldLogo = " ____        _        \n"
-                + "|  _ \\ _   _| | _____ \n"
-                + "| | | | | | | |/ / _ \\\n"
-                + "| |_| | |_| |   <  __/\n"
-                + "|____/ \\__,_|_|\\_\\___|\n";
         String lineBreak = "_______________________"
                 + "________________________________"
                 + "_____\n";
