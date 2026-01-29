@@ -25,7 +25,7 @@ public class Kluso {
         Scanner scanner = new Scanner(System.in);
 
         // Execution block
-        while (readyForInputs == true) {
+        while (readyForInputs) {
             
             // Initialise Scanner
             String input = scanner.nextLine();

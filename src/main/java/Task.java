@@ -2,12 +2,12 @@ import java.time.LocalDateTime;
 
 public class Task {
     private String name;
-    private boolean isComplete;
+    private boolean isComplete = false;
     private LocalDateTime dateTime;
     private int assignmentOrder;
 
     public Task() {
-        this.name = "default unnamed Event";
+        this.name = "empty unnamed Event";
     }
 
     public Task(String name, int assignmentOrder) {
@@ -40,6 +40,14 @@ public class Task {
 
     public int getAssignmentOrder() {
         return assignmentOrder;
+    }
+
+    public String indicateCompletion() {
+        if (isComplete) {
+            return "X";
+        } else {
+            return " ";
+        }
     }
 
 }
