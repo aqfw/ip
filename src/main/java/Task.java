@@ -1,45 +1,50 @@
 import java.time.LocalDateTime;
 
 public class Task {
-    private String name;
+    private final String NAME;
     private boolean isComplete = false;
-    private LocalDateTime dateTime;
-    private int assignmentOrder;
+    private LocalDateTime DATE_TIME;
+    private int ASSIGNMENT_ORDER;
+    private final String[] MARKS = {"[ ]", "[X]"};
 
     public Task() {
-        this.name = "empty unnamed Event";
+        this.NAME = "empty unnamed Event";
     }
 
-    public Task(String name, int assignmentOrder) {
-        this.name = name;
-        this.assignmentOrder = assignmentOrder;
+    public Task(String NAME, int ASSIGNMENT_ORDER) {
+        this.NAME = NAME;
+        this.ASSIGNMENT_ORDER = ASSIGNMENT_ORDER;
     }
 
-    public Task(String name, boolean isComplete, int assignmentOrder) {
-        this.name = name;
+    public Task(String NAME, boolean isComplete, int ASSIGNMENT_ORDER) {
+        this.NAME = NAME;
         this.isComplete = isComplete;
-        this.assignmentOrder = assignmentOrder;
+        this.ASSIGNMENT_ORDER = ASSIGNMENT_ORDER;
     }
 
-    public Task(String name, LocalDateTime startingDateTime, int assignmentOrder) {
-        this.name = name;
-        this.dateTime = startingDateTime;
-        this.assignmentOrder = assignmentOrder;
+    public Task(String NAME, LocalDateTime startingDateTime, int ASSIGNMENT_ORDER) {
+        this.NAME = NAME;
+        this.DATE_TIME = startingDateTime;
+        this.ASSIGNMENT_ORDER = ASSIGNMENT_ORDER;
     }
 
-    public Task(String name, boolean isComplete, LocalDateTime startingDateTime, int assignmentOrder) {
-        this.name = name;
+    public Task(String NAME, boolean isComplete, LocalDateTime startingDateTime, int ASSIGNMENT_ORDER) {
+        this.NAME = NAME;
         this.isComplete = isComplete;
-        this.dateTime = startingDateTime;
-        this.assignmentOrder = assignmentOrder;
+        this.DATE_TIME = startingDateTime;
+        this.ASSIGNMENT_ORDER = ASSIGNMENT_ORDER;
+    }
+
+    public String getName() {
+        return NAME;
     }
 
     public String readBack() {
-        return name;
+        return (isComplete ? MARKS[1]: MARKS[0]) + " " + NAME;
     }
 
     public int getAssignmentOrder() {
-        return assignmentOrder;
+        return ASSIGNMENT_ORDER;
     }
 
     public String indicateCompletion() {
