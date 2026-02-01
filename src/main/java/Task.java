@@ -35,6 +35,14 @@ public class Task {
         this.ASSIGNMENT_ORDER = ASSIGNMENT_ORDER;
     }
 
+    public Task markAsComplete() {
+        return new Task(this.NAME, true, this.DATE_TIME, this.ASSIGNMENT_ORDER);
+    }
+
+    public Task markAsIncomplete() {
+        return new Task(this.NAME, false, this.DATE_TIME, this.ASSIGNMENT_ORDER);
+    }
+
     public String getName() {
         return NAME;
     }

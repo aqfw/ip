@@ -8,6 +8,8 @@ public class Kluso {
         String GREETING_TEXT = NEW_NAME + " single ship, checking in!\n" + "Tasking?\n";
         String QUITTING_TEXT = NEW_NAME + " is RTB!\n";
         String LIST_HEADER = "Standby to read back your tasking order:";
+        String MARK_STRING = "mark ";
+        String UNMARK_STRING = "unmark ";
         
         //Print greeting text
         System.out.println(LINE_BREAK
@@ -27,7 +29,18 @@ public class Kluso {
             
             // Initialise Scanner
             String input = scanner.nextLine();
+            String markSlice = new String();
+            String unmarkSlice = new String();
 
+            if (input.length() >= MARK_STRING.length()) {
+                markSlice = input.substring(0, MARK_STRING.length());
+            }
+
+            if (input.length() >= UNMARK_STRING.length()) {
+                unmarkSlice = input.substring(0, UNMARK_STRING.length());
+            }
+
+            // Chatbot logic tree
             if (input.equals("out")) {
                 //Display quit message
                 System.out.println(LINE_BREAK + QUITTING_TEXT + LINE_BREAK);
@@ -41,10 +54,12 @@ public class Kluso {
                 System.out.println(LINE_BREAK);
                 System.out.println(LIST_HEADER);
                 
-                // Iteratively print the Tasks in the console in the order in which each Task was assigned
+                // If there are no tasks, say so in the program.
                 if (taskCount < 1) {
-                    
+                    System.out.println("No taskings!");
                 }
+
+                // Iteratively print the Tasks in the console in the order in which each Task was assigned
                 for (int i = 0; i <= lastIndex; i++) {
                     String taskNumber = String.valueOf(tasks[i].getAssignmentOrder());
                     System.out.println(taskNumber + ". " + tasks[i].readBack());
@@ -53,7 +68,48 @@ public class Kluso {
                 // Style padding
                 System.out.println(LINE_BREAK);
 
+            } else if (!markSlice.isEmpty() && markSlice.equals(MARK_STRING)) {
+
+                // Task marking logic, checking if a valid integer has been passed; Should be consolidated
+                try {
+                    int indexToMark = Integer.parseInt(input.substring(MARK_STRING.length()));
+
+                    // Immutably mark a task as complete if a valid index has been passed
+                    if (indexToMark > 0 && indexToMark <= taskCount) {
+                        System.out.println(LINE_BREAK + "Okay, I've marked this task as done:\n");
+                        Task markedTask = tasks[indexToMark-1].markAsComplete();
+                        tasks[indexToMark-1] = markedTask;
+                        System.out.println(tasks[indexToMark-1].readBack() + "\n" + LINE_BREAK);
+                    } else {
+                        System.out.println("There's no tasking with this index! Check back!");
+                    }
+                } catch (NumberFormatException e) {
+                    System.out.println("What you said after" + MARK_STRING
+                            + "is invalid; I need a valid index integer!");
+                }
+            } else if (!unmarkSlice.isEmpty() && unmarkSlice.equals(UNMARK_STRING)) {
+
+                // Task marking logic, checking if a valid integer has been passed; Should be consolidated
+                try {
+                    int indexToUnmark = Integer.parseInt(input.substring(UNMARK_STRING.length()));
+
+                    // Immutably mark a task as complete if a valid index has been passed
+                    if (indexToUnmark > 0 && indexToUnmark <= taskCount) {
+                        System.out.println(LINE_BREAK + "Okay, I've marked this task as incomplete:\n");
+                        Task unmarkedTask = tasks[indexToUnmark -1].markAsIncomplete();
+                        tasks[indexToUnmark -1] = unmarkedTask;
+                        System.out.println(tasks[indexToUnmark -1].readBack() + "\n" + LINE_BREAK);
+                    } else {
+                        System.out.println("There's no tasking with this index! Check back!");
+                    }
+                } catch (NumberFormatException e) {
+                    System.out.println("What you said after" + MARK_STRING
+                            + "is invalid; I need a valid index integer!");
+                }
+
             } else {
+                //System.out.println(markSlice.isEmpty());
+                //System.out.println(unmarkSlice.isEmpty());
 
                 // Create new Task object, add to array, echo the addition and increment taskCount counter
                 Task newTask = new Task(input, taskCount+1);
