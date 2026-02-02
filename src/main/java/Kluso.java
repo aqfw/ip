@@ -12,11 +12,9 @@ public class Kluso {
         String UNMARK_STRING = "unmark ";
         
         //Print greeting text
-        System.out.println(LINE_BREAK
-                + GREETING_TEXT
-                + LINE_BREAK);
+        System.out.println(LINE_BREAK + GREETING_TEXT + LINE_BREAK);
 
-        // Create logic variables
+        // Create basic interface variables
         Task[] tasks = new Task[100];
         int taskCount = 0;
         boolean readyForInputs = true;
@@ -108,8 +106,6 @@ public class Kluso {
                 }
 
             } else {
-                //System.out.println(markSlice.isEmpty());
-                //System.out.println(unmarkSlice.isEmpty());
 
                 // Create new Task object, add to array, echo the addition and increment taskCount counter
                 Task newTask = new Task(input, taskCount+1);
@@ -121,6 +117,7 @@ public class Kluso {
             }
         }
 
+        // Close the scanner stream
         scanner.close();
 
     }

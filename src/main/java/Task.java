@@ -1,14 +1,13 @@
 import java.time.LocalDateTime;
 
 public class Task {
-    private final String NAME;
-    private boolean isComplete = false;
-    private LocalDateTime DATE_TIME;
-    private int ASSIGNMENT_ORDER;
-    private final String[] MARKS = {"[ ]", "[X]"};
+    protected String NAME;
+    protected boolean isComplete = false;
+    protected int ASSIGNMENT_ORDER;
+    protected String[] MARKS = {"[ ]", "[X]"};
 
     public Task() {
-        this.NAME = "empty unnamed Event";
+        this.NAME = "empty unnamed Task";
     }
 
     public Task(String NAME, int ASSIGNMENT_ORDER) {
@@ -22,25 +21,13 @@ public class Task {
         this.ASSIGNMENT_ORDER = ASSIGNMENT_ORDER;
     }
 
-    public Task(String NAME, LocalDateTime startingDateTime, int ASSIGNMENT_ORDER) {
-        this.NAME = NAME;
-        this.DATE_TIME = startingDateTime;
-        this.ASSIGNMENT_ORDER = ASSIGNMENT_ORDER;
-    }
-
-    public Task(String NAME, boolean isComplete, LocalDateTime startingDateTime, int ASSIGNMENT_ORDER) {
-        this.NAME = NAME;
-        this.isComplete = isComplete;
-        this.DATE_TIME = startingDateTime;
-        this.ASSIGNMENT_ORDER = ASSIGNMENT_ORDER;
-    }
 
     public Task markAsComplete() {
-        return new Task(this.NAME, true, this.DATE_TIME, this.ASSIGNMENT_ORDER);
+        return new Task(this.NAME, true, this.ASSIGNMENT_ORDER);
     }
 
     public Task markAsIncomplete() {
-        return new Task(this.NAME, false, this.DATE_TIME, this.ASSIGNMENT_ORDER);
+        return new Task(this.NAME, false, this.ASSIGNMENT_ORDER);
     }
 
     public String getName() {
