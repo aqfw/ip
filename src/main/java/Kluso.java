@@ -1,8 +1,9 @@
 import java.util.Scanner;
 
 public class Kluso {
+
     public static void main(String[] args) {
-        
+
         String LINE_BREAK = "____________________________________________________________\n";
         String NEW_NAME = "Kluso";
         String GREETING_TEXT = NEW_NAME + " single ship, checking in!\n" + "Tasking?\n";
@@ -101,7 +102,7 @@ public class Kluso {
                         System.out.println("There's no tasking with this index! Check back!");
                     }
                 } catch (NumberFormatException e) {
-                    System.out.println("What you said after" + MARK_STRING
+                    System.out.println("What you said after " + MARK_STRING
                             + "is invalid; I need a valid index integer!");
                 }
 
@@ -122,4 +123,6 @@ public class Kluso {
 
     }
 
+
 }
+

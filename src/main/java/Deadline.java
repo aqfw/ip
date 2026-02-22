@@ -4,8 +4,8 @@ public class Deadline extends Task {
     private String DATE_TIME = new String();
 
     public Deadline() {
+        super();
         this.NAME = "empty unnamed Deadline";
-
     }
 
     public Deadline(String NAME, String DATE_TIME, int ASSIGNMENT_ORDER) {
