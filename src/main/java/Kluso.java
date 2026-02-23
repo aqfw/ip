@@ -136,6 +136,8 @@ public class Kluso {
         readyForInputs = false;
     }
 
+    private static void
+
     private String[] parse(String input) {
 
         // Check if input is null, if not throw exception
@@ -155,8 +157,12 @@ public class Kluso {
 
         // Handle the first word using a switch case:
         switch(command) {
-        case "mark", "unmark":
 
+        case "out":
+            return (new String[]{"out"});
+        case "list":
+            return (new String[]{"list"});
+        case "mark", "unmark":
             // Check and throw an exception if the integer after mark is empty.
             if (arguments.isEmpty()) {
                 throw new IllegalArgumentException("You haven't given me an integer associated with a task!");
