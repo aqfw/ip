@@ -21,9 +21,6 @@ public class Kluso {
     static final String DELETE_STRING = "delete";
 
     // Logic variables
-    static Task[] tasks = new Task[100];
-    static int taskCount = 0;
-
     static ArrayList<Task> tasks2 = new ArrayList<>();
     static boolean isReadyForInputs = true;
 
@@ -172,7 +169,7 @@ public class Kluso {
         Task newTask = new Task(input, tasks2.size() + 1);
         tasks2.add(newTask);
         System.out.println(LINE_BREAK + "Roger, I've added task at position no.: " + tasks2.size() + ", " +
-                tasks2.get(taskCount).getName() + "\n" + getTaskCountSignature() + "\n" + LINE_BREAK);
+                tasks2.get(tasks2.size()-1).getName() + "\n" + getTaskCountSignature() + "\n" + LINE_BREAK);
         System.out.println();
     }
 
@@ -181,7 +178,7 @@ public class Kluso {
         Task newTask = new Todo(todoName, tasks2.size() + 1);
         tasks2.add(newTask);
         System.out.println(LINE_BREAK + "Roger, I've added to-do at position no. " + tasks2.size() + ", " +
-                tasks2.get(taskCount).getName() + "\n" + getTaskCountSignature() + "\n" + LINE_BREAK);
+                tasks2.get(tasks2.size()-1).getName() + "\n" + getTaskCountSignature() + "\n" + LINE_BREAK);
         System.out.println();
     }
 
@@ -190,15 +187,15 @@ public class Kluso {
         Task newTask = new Deadline(deadlineName, deadlineTime, tasks2.size() + 1);
         tasks2.add(newTask);
         System.out.println(LINE_BREAK + "Roger, I've added deadline at position no. " + tasks2.size() + ", " +
-                tasks2.get(taskCount).getName() + "\n" + getTaskCountSignature() + "\n" + LINE_BREAK);
+                tasks2.get(tasks2.size()-1).getName() + "\n" + getTaskCountSignature() + "\n" + LINE_BREAK);
         System.out.println();
     }
 
     private static void addEvent(String eventName, String startTime, String endTime) {
         Task newTask = new Event(eventName, startTime, endTime, tasks2.size() + 1);
         tasks2.add(newTask);
-        System.out.println(LINE_BREAK + "Roger, I've added event at position no. " + tasks2.size() + ", "
-                + newTask.getName() + "\n" + getTaskCountSignature() + "\n" + LINE_BREAK);
+        System.out.println(LINE_BREAK + "Roger, I've added event at position no. " + tasks2.size() + ", " +
+                tasks2.get(tasks2.size()-1).getName() + "\n" + getTaskCountSignature() + "\n" + LINE_BREAK);
         System.out.println();
     }
 
