@@ -1,43 +1,43 @@
 public class Task {
-    protected String NAME;
+    protected String name;
     protected boolean isComplete = false;
-    protected int ASSIGNMENT_ORDER;
-    protected String[] MARKS = {"[ ]", "[X]"};
+    protected int assignmentOrder;
+    protected String[] marks = {"[ ]", "[X]"};
 
     public Task() {
-        this.NAME = "empty unnamed Task";
+        this.name = "empty unnamed Task";
     }
 
-    public Task(String NAME, int ASSIGNMENT_ORDER) {
-        this.NAME = NAME;
-        this.ASSIGNMENT_ORDER = ASSIGNMENT_ORDER;
+    public Task(String name, int assignmentOrder) {
+        this.name = name;
+        this.assignmentOrder = assignmentOrder;
     }
 
-    public Task(String NAME, boolean isComplete, int ASSIGNMENT_ORDER) {
-        this.NAME = NAME;
+    public Task(String name, boolean isComplete, int assignmentOrder) {
+        this.name = name;
         this.isComplete = isComplete;
-        this.ASSIGNMENT_ORDER = ASSIGNMENT_ORDER;
+        this.assignmentOrder = assignmentOrder;
     }
 
 
     public Task markAsComplete() {
-        return new Task(this.NAME, true, this.ASSIGNMENT_ORDER);
+        return new Task(this.name, true, this.assignmentOrder);
     }
 
     public Task markAsIncomplete() {
-        return new Task(this.NAME, false, this.ASSIGNMENT_ORDER);
+        return new Task(this.name, false, this.assignmentOrder);
     }
 
     public String getName() {
-        return NAME;
+        return name;
     }
 
     public String readBack() {
-        return (isComplete ? MARKS[1]: MARKS[0]) + " " + NAME;
+        return (isComplete ? marks[1]: marks[0]) + " " + name;
     }
 
     public int getAssignmentOrder() {
-        return ASSIGNMENT_ORDER;
+        return assignmentOrder;
     }
 
     public String indicateCompletion() {

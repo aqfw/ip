@@ -1,36 +1,36 @@
 public class Deadline extends Task {
 
-    private final String TASK_TYPE = "[D]";
-    private String DATE_TIME = new String();
+    static final String taskType = "[D]";
+    private String deadline = new String();
 
     public Deadline() {
         super();
-        this.NAME = "empty unnamed Deadline";
+        this.name = "empty unnamed Deadline";
     }
 
-    public Deadline(String NAME, String DATE_TIME, int ASSIGNMENT_ORDER) {
-        super(NAME, ASSIGNMENT_ORDER);
-        this.DATE_TIME = DATE_TIME;
+    public Deadline(String name, String deadline, int assignmentOrder) {
+        super(name, assignmentOrder);
+        this.deadline = deadline;
     }
 
-    public Deadline(String NAME, String DATE_TIME, boolean isComplete, int ASSIGNMENT_ORDER) {
-        super(NAME, isComplete, ASSIGNMENT_ORDER);
-        this.DATE_TIME = DATE_TIME;
+    public Deadline(String name, String deadline, boolean isComplete, int assignmentOrder) {
+        super(name, isComplete, assignmentOrder);
+        this.deadline = deadline;
     }
 
     @Override
     public Deadline markAsComplete(){
-        return new Deadline(this.NAME, this.DATE_TIME, true, this.ASSIGNMENT_ORDER);
+        return new Deadline(this.name, this.deadline, true, this.assignmentOrder);
     }
 
     @Override
     public Deadline markAsIncomplete() {
-        return new Deadline(this.NAME, this.DATE_TIME, false, this.ASSIGNMENT_ORDER);
+        return new Deadline(this.name, this.deadline, false, this.assignmentOrder);
     }
 
     @Override
     public String readBack() {
-        return (TASK_TYPE + (isComplete ? MARKS[1]: MARKS[0])) + " " + NAME + "(" + DATE_TIME + ")";
+        return (taskType + (isComplete ? marks[1]: marks[0])) + " " + name + "(" + deadline + ")";
     }
 
 }

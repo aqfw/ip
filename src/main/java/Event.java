@@ -1,40 +1,40 @@
 public class Event extends Task {
 
-    private final String TASK_TYPE = "[E]";
-    private String START_TIME = new String();
-    private String END_TIME = new String();
+    static final String taskType = "[E]";
+    private String startTime = new String();
+    private String endTime = new String();
 
     public Event() {
         super();
-        this.NAME = "empty unnamed Event";
+        this.name = "empty unnamed Event";
     }
 
-    public Event(String NAME, String START_TIME, String END_TIME, int ASSIGNMENT_ORDER) {
-        super(NAME, ASSIGNMENT_ORDER);
-        this.START_TIME = START_TIME;
-        this.END_TIME = END_TIME;
+    public Event(String name, String startTime, String endTime, int assignmentOrder) {
+        super(name, assignmentOrder);
+        this.startTime = startTime;
+        this.endTime = endTime;
     }
 
-    public Event(String NAME, String START_TIME, String END_TIME, boolean isComplete, int ASSIGNMENT_ORDER) {
-        super(NAME, isComplete, ASSIGNMENT_ORDER);
-        this.START_TIME = START_TIME;
-        this.END_TIME = END_TIME;
+    public Event(String name, String startTime, String endTime, boolean isComplete, int assignmentOrder) {
+        super(name, isComplete, assignmentOrder);
+        this.startTime = startTime;
+        this.endTime = endTime;
     }
 
     @Override
     public Event markAsComplete(){
-        return new Event(this.NAME, this.START_TIME, this.END_TIME, true, this.ASSIGNMENT_ORDER);
+        return new Event(this.name, this.startTime, this.endTime, true, this.assignmentOrder);
     }
 
     @Override
     public Event markAsIncomplete() {
-        return new Event(this.NAME, this.START_TIME, this.END_TIME, false, this.ASSIGNMENT_ORDER);
+        return new Event(this.name, this.startTime, this.endTime, false, this.assignmentOrder);
     }
 
     @Override
     public String readBack() {
-        return (TASK_TYPE + (isComplete ? MARKS[1]: MARKS[0])) + " " + NAME + "(from: " + START_TIME +
-                ", to: " + END_TIME + ")";
+        return (taskType + (isComplete ? marks[1]: marks[0])) + " " + name + "(from: " + startTime +
+                ", to: " + endTime + ")";
     }
 
 }
