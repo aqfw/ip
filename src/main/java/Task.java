@@ -19,7 +19,6 @@ public class Task {
         this.assignmentOrder = assignmentOrder;
     }
 
-
     public Task markAsComplete() {
         return new Task(this.name, true, this.assignmentOrder);
     }
@@ -28,12 +27,18 @@ public class Task {
         return new Task(this.name, false, this.assignmentOrder);
     }
 
-    public String getName() {
-        return name;
-    }
-
     public String readBack() {
         return (isComplete ? marks[1]: marks[0]) + " " + name;
+    }
+
+    // This is a side effect free way of resetting the assignment order by returning a new instance of Todo with an
+    // updated order, used in Kluso to set orders after a deletion.
+    public Task reassignOrder(int newOrder) {
+        return new Task(this.name, this.isComplete, newOrder);
+    }
+
+    public String getName() {
+        return name;
     }
 
     public int getAssignmentOrder() {

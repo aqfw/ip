@@ -93,7 +93,23 @@ public class Kluso {
     private static void deleteTask(String indexString) {
         try {
             int indexToDelete = Integer.parseInt(indexString);
-            System.out.println("delete " + indexToDelete);
+
+            if (indexToDelete > 0 && indexToDelete <= tasks.size()) {
+                Task removedTask = tasks.remove(indexToDelete - 1);
+
+                // Shifts all entries after the removed entry in the list "up" by one index by inserting
+                // new Task entries into the tasks list
+                for (int i = indexToDelete - 1; i < tasks.size(); i++) {
+                    tasks.set(i, tasks.get(i).reassignOrder(i+1));
+                }
+
+                System.out.println(LINE_BREAK + "Roger, I've removed this tasking:\n  " +
+                        removedTask.readBack() + "\n" + getTaskCountSignature() + "\n" + LINE_BREAK);
+
+            } else {
+                System.out.println("There's no tasking with this index! Check back!");
+            }
+
         } catch (NumberFormatException e) {
             System.out.println("What you said after " + DELETE_STRING
                     + " is invalid; I need a valid index integer!");

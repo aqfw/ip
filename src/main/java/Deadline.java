@@ -33,4 +33,11 @@ public class Deadline extends Task {
         return (taskType + (isComplete ? marks[1]: marks[0])) + " " + name + "(" + deadline + ")";
     }
 
+    // This is a side effect free way of resetting the assignment order by returning a new instance of Deadline
+    // with an updated order, used in Kluso to set orders after a deletion.
+    @Override
+    public Deadline reassignOrder(int newOrder) {
+        return new Deadline(this.name, this.deadline, this.isComplete, newOrder);
+    }
+
 }

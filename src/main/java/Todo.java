@@ -29,5 +29,12 @@ public class Todo extends Task {
         return (taskType + (isComplete ? marks[1]: marks[0])) + " " + name;
     }
 
+    // This is a side effect free way of resetting the assignment order by returning a new instance of Todo
+    // with an updated order, used in Kluso to set orders after a deletion.
+    @Override
+    public Todo reassignOrder(int newOrder) {
+        return new Todo(this.name, this.isComplete, newOrder);
+    }
+
 
 }
