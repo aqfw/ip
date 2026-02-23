@@ -117,8 +117,8 @@ public class Kluso {
                 System.out.println("There's no tasking with this index! Check back!");
             }
         } catch (NumberFormatException e) {
-            System.out.println("What you said after" + UNMARK_STRING
-                    + "is invalid; I need a valid index integer!");
+            System.out.println("What you said after " + UNMARK_STRING
+                    + " is invalid; I need a valid index integer!");
         }
     }
 
@@ -140,7 +140,7 @@ public class Kluso {
             }
         } catch (NumberFormatException e) {
             System.out.println("What you said after " + MARK_STRING
-                    + "is invalid; I need a valid index integer!");
+                    + " is invalid; I need a valid index integer!");
         }
 
     }
@@ -187,6 +187,7 @@ public class Kluso {
     private static String[] parse(String input) {
 
         try {
+
             // Check if input is null, if not try/catch exception
             if (input == null || input.isBlank()) {
 
@@ -215,13 +216,6 @@ public class Kluso {
                     throw new IllegalArgumentException("You haven't given me an integer associated with a task!");
                 }
 
-                // Return the parsed parts of the command to the main method
-                try {
-                    int index = Integer.parseInt(arguments);
-                    return (parts);
-                } catch (NumberFormatException e) {
-                    System.out.println("There's no tasking with this index! Check back!\n");
-                }
             case "todo":
                 if (arguments.isEmpty()) {
                     throw new IllegalArgumentException("I'm missing a name for the todo!");
