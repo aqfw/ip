@@ -9,18 +9,13 @@ public class Deadline extends Task {
     }
 
     public Deadline(String NAME, String DATE_TIME, int ASSIGNMENT_ORDER) {
-        this.NAME = NAME;
-        this.ASSIGNMENT_ORDER = ASSIGNMENT_ORDER;
+        super(NAME, ASSIGNMENT_ORDER);
         this.DATE_TIME = DATE_TIME;
-
     }
 
     public Deadline(String NAME, String DATE_TIME, boolean isComplete, int ASSIGNMENT_ORDER) {
-        this.NAME = NAME;
-        this.isComplete = isComplete;
-        this.ASSIGNMENT_ORDER = ASSIGNMENT_ORDER;
+        super(NAME, isComplete, ASSIGNMENT_ORDER);
         this.DATE_TIME = DATE_TIME;
-
     }
 
     @Override
@@ -35,7 +30,7 @@ public class Deadline extends Task {
 
     @Override
     public String readBack() {
-        return (TASK_TYPE + (isComplete ? MARKS[1]: MARKS[0])) + " " + NAME + "(" + DATE_TIME;
+        return (TASK_TYPE + (isComplete ? MARKS[1]: MARKS[0])) + " " + NAME + "(" + DATE_TIME + ")";
     }
 
 }
