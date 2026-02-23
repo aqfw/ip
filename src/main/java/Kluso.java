@@ -1,4 +1,4 @@
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Kluso {
@@ -11,17 +11,27 @@ public class Kluso {
     static final String LIST_HEADER = "Standby to read back your tasking order:";
 
     // Commands
+    static final String QUIT_STRING = "out";
+    static final String LIST_STRING = "list";
     static final String MARK_STRING = "mark";
     static final String UNMARK_STRING = "unmark";
     static final String TODO_STRING = "todo";
     static final String DEADLINE_STRING = "deadline";
     static final String EVENT_STRING = "event";
+    static final String DELETE_STRING = "delete";
 
     // Logic variables
     static Task[] tasks = new Task[100];
     static int taskCount = 0;
-    static boolean readyForInputs = true;
 
+    static ArrayList<Task> tasks2 = new ArrayList<>();
+    static boolean isReadyForInputs = true;
+
+
+    /**
+     * Main method of the Kluso application.
+     * Opens a scanner stream, reads user input in a loop, and dispatches commands.
+     */
     public static void main(String[] args) {
 
         //Print greeting text
@@ -31,16 +41,16 @@ public class Kluso {
         Scanner scanner = new Scanner(System.in);
 
         // Execution block
-        while (readyForInputs) {
+        while (isReadyForInputs) {
             
-            // Initialise Scanner
+            // Read input and parse into command segments
             String input = scanner.nextLine();
             String[] commandSegments = parse(input);
 
             if (commandSegments.length == 1) {
                 switch (commandSegments[0]) {
-                    case "out" -> quitProgram();
-                    case "list" -> listTasks();
+                    case QUIT_STRING -> quitProgram();
+                    case LIST_STRING -> listTasks();
                     default -> addTask(commandSegments[0]);
                 }
             }
@@ -50,6 +60,7 @@ public class Kluso {
                     case MARK_STRING -> markTask(commandSegments[1]);
                     case UNMARK_STRING -> unmarkTask(commandSegments[1]);
                     case TODO_STRING -> addTodo(commandSegments[1]);
+                    //case DELETE_STRING -> deleteTask(commandSegments[1]);
                 }
             }
 
@@ -72,29 +83,35 @@ public class Kluso {
 
     }
 
+    /**
+     * Displays the quit message and stops the user's input loop.
+     */
     private static void quitProgram() {
         //Display quit message
         System.out.println(LINE_BREAK + QUITTING_TEXT + LINE_BREAK);
-        readyForInputs = false;
+        isReadyForInputs = false;
     }
 
+    /**
+     * Prints all tasks currently stored in the task list.
+     */
     private static void listTasks() {
         // Subtract 1 from taskCount to get the last index in the array where a Task is stored
-        int lastIndex = taskCount - 1;
+        //int lastIndex = taskCount - 1;
 
         // Style padding
         System.out.println(LINE_BREAK);
         System.out.println(LIST_HEADER);
 
         // If there are no tasks, say so in the program.
-        if (taskCount < 1) {
+        if (tasks2.isEmpty()) {
             System.out.println("No taskings!");
         }
 
         // Iteratively print the Tasks in the console in the order in which each Task was assigned
-        for (int i = 0; i <= lastIndex; i++) {
-            String taskNumber = String.valueOf(tasks[i].getAssignmentOrder());
-            System.out.println(taskNumber + ". " + tasks[i].readBack());
+        for (int i = 0; i < tasks2.size(); i++) {
+            String taskNumber = String.valueOf(tasks2.get(i).getAssignmentOrder());
+            System.out.println(taskNumber + ". " + tasks2.get(i).readBack());
         }
 
         // Style padding
@@ -107,12 +124,12 @@ public class Kluso {
             int indexToMark = Integer.parseInt(indexString);
 
             // Immutably mark a task as complete if a valid index has been passed
-            if (indexToMark > 0 && indexToMark <= taskCount) {
+            if (indexToMark > 0 && indexToMark <= tasks2.size()) {
                 System.out.println(LINE_BREAK + "Okay, I've marked task no. " + (indexToMark) +
                         " as done:\n");
-                Task markedTask = tasks[indexToMark-1].markAsComplete();
-                tasks[indexToMark-1] = markedTask;
-                System.out.println(tasks[indexToMark-1].readBack() + "\n" + LINE_BREAK);
+                Task markedTask = tasks2.get(indexToMark-1).markAsComplete();
+                tasks2.set(indexToMark-1, markedTask);
+                System.out.println(tasks2.get(indexToMark-1).readBack() + "\n" + LINE_BREAK);
             } else {
                 System.out.println("There's no tasking with this index! Check back!");
             }
@@ -129,12 +146,12 @@ public class Kluso {
             int indexToUnmark = Integer.parseInt(indexString);
 
             // Immutably mark a task as complete if a valid index has been passed
-            if (indexToUnmark > 0 && indexToUnmark <= taskCount) {
+            if (indexToUnmark > 0 && indexToUnmark <= tasks2.size()) {
                 System.out.println(LINE_BREAK + "Okay, I've unmarked task no. " + (indexToUnmark) +
                         " to incomplete:\n");
-                Task unmarkedTask = tasks[indexToUnmark -1].markAsIncomplete();
-                tasks[indexToUnmark -1] = unmarkedTask;
-                System.out.println(tasks[indexToUnmark -1].readBack() + "\n" + LINE_BREAK);
+                Task unmarkedTask = tasks2.get(indexToUnmark -1).markAsIncomplete();
+                tasks2.set(indexToUnmark -1, unmarkedTask);
+                System.out.println(tasks2.get(indexToUnmark -1).readBack() + "\n" + LINE_BREAK);
             } else {
                 System.out.println("There's no tasking with this index! Check back!");
             }
@@ -145,43 +162,44 @@ public class Kluso {
 
     }
 
+    private static String getTaskCountSignature() {
+        int count = tasks2.size();
+        return "I've got " + count + (count == 1 ? " tasking" : " taskings") + " on my order.";
+    }
+
     private static void addTask(String input) {
         // Create new Task object, add to array, echo the addition and increment taskCount counter
-        Task newTask = new Task(input, taskCount+1);
-        tasks[taskCount] = newTask;
-        System.out.println(LINE_BREAK + "Roger, I've added task at position no.: " + (taskCount+1) + ", " +
-                tasks[taskCount].getName() + "\n" + LINE_BREAK);
+        Task newTask = new Task(input, tasks2.size() + 1);
+        tasks2.add(newTask);
+        System.out.println(LINE_BREAK + "Roger, I've added task at position no.: " + tasks2.size() + ", " +
+                tasks2.get(taskCount).getName() + "\n" + getTaskCountSignature() + "\n" + LINE_BREAK);
         System.out.println();
-        taskCount += 1;
     }
 
     private static void addTodo(String todoName) {
         // Create new Todo object, add to array, echo the addition and increment taskCount counter
-        Task newTask = new Todo(todoName, taskCount+1);
-        tasks[taskCount] = newTask;
-        System.out.println(LINE_BREAK + "Roger, I've added to-do at position no. " + (taskCount+1) + ", " +
-                tasks[taskCount].getName() + "\n" + LINE_BREAK);
+        Task newTask = new Todo(todoName, tasks2.size() + 1);
+        tasks2.add(newTask);
+        System.out.println(LINE_BREAK + "Roger, I've added to-do at position no. " + tasks2.size() + ", " +
+                tasks2.get(taskCount).getName() + "\n" + getTaskCountSignature() + "\n" + LINE_BREAK);
         System.out.println();
-        taskCount += 1;
     }
 
     private static void addDeadline(String deadlineName, String deadlineTime) {
         // Create new Deadline object, add to array, echo the addition and increment taskCount counter
-        Task newTask = new Deadline(deadlineName, deadlineTime, taskCount+1);
-        tasks[taskCount] = newTask;
-        System.out.println(LINE_BREAK + "Roger, I've added deadline at position no. " + (taskCount+1) + ", " +
-                tasks[taskCount].getName() + "\n" + LINE_BREAK);
+        Task newTask = new Deadline(deadlineName, deadlineTime, tasks2.size() + 1);
+        tasks2.add(newTask);
+        System.out.println(LINE_BREAK + "Roger, I've added deadline at position no. " + tasks2.size() + ", " +
+                tasks2.get(taskCount).getName() + "\n" + getTaskCountSignature() + "\n" + LINE_BREAK);
         System.out.println();
-        taskCount += 1;
     }
 
     private static void addEvent(String eventName, String startTime, String endTime) {
-        Task newTask = new Event(eventName, startTime, endTime, taskCount+1);
-        tasks[taskCount] = newTask;
-        System.out.println(LINE_BREAK + "Roger, I've added deadline at position no. " + (taskCount+1) + ", " +
-                tasks[taskCount].getName() + "\n" + LINE_BREAK);
+        Task newTask = new Event(eventName, startTime, endTime, tasks2.size() + 1);
+        tasks2.add(newTask);
+        System.out.println(LINE_BREAK + "Roger, I've added event at position no. " + tasks2.size() + ", "
+                + newTask.getName() + "\n" + getTaskCountSignature() + "\n" + LINE_BREAK);
         System.out.println();
-        taskCount += 1;
     }
 
     private static String[] parse(String input) {
@@ -206,23 +224,28 @@ public class Kluso {
 
             // Handle the first word using a switch case:
             switch (command) {
-            case "out":
+            case QUIT_STRING:
                 return (new String[]{"out"});
-            case "list":
+            case LIST_STRING:
                 return (new String[]{"list"});
-            case "mark", "unmark":
+            case MARK_STRING:
                 // Check and throw an exception if the integer after mark is empty.
                 if (arguments.isEmpty()) {
                     throw new IllegalArgumentException("You haven't given me an integer associated with a task!");
                 }
-
-            case "todo":
+            case UNMARK_STRING:
+                // Check and throw an exception if the integer after mark is empty.
+                if (arguments.isEmpty()) {
+                    throw new IllegalArgumentException("You haven't given me an integer associated with a task!");
+                }
+                return parts;
+            case TODO_STRING:
                 if (arguments.isEmpty()) {
                     throw new IllegalArgumentException("I'm missing a name for the todo!");
                 } else {
                     return (parts);
                 }
-            case "deadline":
+            case DEADLINE_STRING:
                 int slashIndex = arguments.indexOf("/");
 
                 // Check if the user has used the "slash" to indicate "from" time.
@@ -244,7 +267,7 @@ public class Kluso {
                 }
 
                 return (new String[]{command, deadlineName, deadlineTime});
-            case "event":
+            case EVENT_STRING:
                 int startTimeIndex = arguments.indexOf("/from");
                 int endTimeIndex = arguments.indexOf("/to");
 
@@ -271,9 +294,11 @@ public class Kluso {
                 }
 
                 return (new String[]{command, eventName, startTime, endTime});
+
             // The case where a basic task is to be entered will be handled using the "default" case.
             default:
-                // In this case, simply return a task name as per Level 3
+
+                // Treat unrecognised first word as a task name as per Level-3
                 String taskName = input.trim();
                 return (new String[]{taskName});
             }
