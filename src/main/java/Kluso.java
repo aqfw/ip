@@ -21,7 +21,7 @@ public class Kluso {
     static final String DELETE_STRING = "delete";
 
     // Logic variables
-    static ArrayList<Task> tasks2 = new ArrayList<>();
+    static ArrayList<Task> tasks = new ArrayList<>();
     static boolean isReadyForInputs = true;
 
 
@@ -44,6 +44,7 @@ public class Kluso {
             String input = scanner.nextLine();
             String[] commandSegments = parse(input);
 
+            // Handle each of the cases, differentiated according to the length of the input.
             if (commandSegments.length == 1) {
                 switch (commandSegments[0]) {
                     case QUIT_STRING -> quitProgram();
@@ -101,14 +102,14 @@ public class Kluso {
         System.out.println(LIST_HEADER);
 
         // If there are no tasks, say so in the program.
-        if (tasks2.isEmpty()) {
+        if (tasks.isEmpty()) {
             System.out.println("No taskings!");
         }
 
         // Iteratively print the Tasks in the console in the order in which each Task was assigned
-        for (int i = 0; i < tasks2.size(); i++) {
-            String taskNumber = String.valueOf(tasks2.get(i).getAssignmentOrder());
-            System.out.println(taskNumber + ". " + tasks2.get(i).readBack());
+        for (int i = 0; i < tasks.size(); i++) {
+            String taskNumber = String.valueOf(tasks.get(i).getAssignmentOrder());
+            System.out.println(taskNumber + ". " + tasks.get(i).readBack());
         }
 
         // Style padding
@@ -121,12 +122,12 @@ public class Kluso {
             int indexToMark = Integer.parseInt(indexString);
 
             // Immutably mark a task as complete if a valid index has been passed
-            if (indexToMark > 0 && indexToMark <= tasks2.size()) {
+            if (indexToMark > 0 && indexToMark <= tasks.size()) {
                 System.out.println(LINE_BREAK + "Okay, I've marked task no. " + (indexToMark) +
                         " as done:\n");
-                Task markedTask = tasks2.get(indexToMark-1).markAsComplete();
-                tasks2.set(indexToMark-1, markedTask);
-                System.out.println(tasks2.get(indexToMark-1).readBack() + "\n" + LINE_BREAK);
+                Task markedTask = tasks.get(indexToMark-1).markAsComplete();
+                tasks.set(indexToMark-1, markedTask);
+                System.out.println(tasks.get(indexToMark-1).readBack() + "\n" + LINE_BREAK);
             } else {
                 System.out.println("There's no tasking with this index! Check back!");
             }
@@ -143,12 +144,12 @@ public class Kluso {
             int indexToUnmark = Integer.parseInt(indexString);
 
             // Immutably mark a task as complete if a valid index has been passed
-            if (indexToUnmark > 0 && indexToUnmark <= tasks2.size()) {
+            if (indexToUnmark > 0 && indexToUnmark <= tasks.size()) {
                 System.out.println(LINE_BREAK + "Okay, I've unmarked task no. " + (indexToUnmark) +
                         " to incomplete:\n");
-                Task unmarkedTask = tasks2.get(indexToUnmark -1).markAsIncomplete();
-                tasks2.set(indexToUnmark -1, unmarkedTask);
-                System.out.println(tasks2.get(indexToUnmark -1).readBack() + "\n" + LINE_BREAK);
+                Task unmarkedTask = tasks.get(indexToUnmark -1).markAsIncomplete();
+                tasks.set(indexToUnmark -1, unmarkedTask);
+                System.out.println(tasks.get(indexToUnmark -1).readBack() + "\n" + LINE_BREAK);
             } else {
                 System.out.println("There's no tasking with this index! Check back!");
             }
@@ -160,42 +161,42 @@ public class Kluso {
     }
 
     private static String getTaskCountSignature() {
-        int count = tasks2.size();
+        int count = tasks.size();
         return "I've got " + count + (count == 1 ? " tasking" : " taskings") + " on my order.";
     }
 
     private static void addTask(String input) {
         // Create new Task object, add to array, echo the addition and increment taskCount counter
-        Task newTask = new Task(input, tasks2.size() + 1);
-        tasks2.add(newTask);
-        System.out.println(LINE_BREAK + "Roger, I've added task at position no.: " + tasks2.size() + ", " +
-                tasks2.get(tasks2.size()-1).getName() + "\n" + getTaskCountSignature() + "\n" + LINE_BREAK);
+        Task newTask = new Task(input, tasks.size() + 1);
+        tasks.add(newTask);
+        System.out.println(LINE_BREAK + "Roger, I've added task at position no.: " + tasks.size() + ", " +
+                tasks.get(tasks.size()-1).getName() + "\n" + getTaskCountSignature() + "\n" + LINE_BREAK);
         System.out.println();
     }
 
     private static void addTodo(String todoName) {
         // Create new Todo object, add to array, echo the addition and increment taskCount counter
-        Task newTask = new Todo(todoName, tasks2.size() + 1);
-        tasks2.add(newTask);
-        System.out.println(LINE_BREAK + "Roger, I've added to-do at position no. " + tasks2.size() + ", " +
-                tasks2.get(tasks2.size()-1).getName() + "\n" + getTaskCountSignature() + "\n" + LINE_BREAK);
+        Task newTask = new Todo(todoName, tasks.size() + 1);
+        tasks.add(newTask);
+        System.out.println(LINE_BREAK + "Roger, I've added to-do at position no. " + tasks.size() + ", " +
+                tasks.get(tasks.size()-1).getName() + "\n" + getTaskCountSignature() + "\n" + LINE_BREAK);
         System.out.println();
     }
 
     private static void addDeadline(String deadlineName, String deadlineTime) {
         // Create new Deadline object, add to array, echo the addition and increment taskCount counter
-        Task newTask = new Deadline(deadlineName, deadlineTime, tasks2.size() + 1);
-        tasks2.add(newTask);
-        System.out.println(LINE_BREAK + "Roger, I've added deadline at position no. " + tasks2.size() + ", " +
-                tasks2.get(tasks2.size()-1).getName() + "\n" + getTaskCountSignature() + "\n" + LINE_BREAK);
+        Task newTask = new Deadline(deadlineName, deadlineTime, tasks.size() + 1);
+        tasks.add(newTask);
+        System.out.println(LINE_BREAK + "Roger, I've added deadline at position no. " + tasks.size() + ", " +
+                tasks.get(tasks.size()-1).getName() + "\n" + getTaskCountSignature() + "\n" + LINE_BREAK);
         System.out.println();
     }
 
     private static void addEvent(String eventName, String startTime, String endTime) {
-        Task newTask = new Event(eventName, startTime, endTime, tasks2.size() + 1);
-        tasks2.add(newTask);
-        System.out.println(LINE_BREAK + "Roger, I've added event at position no. " + tasks2.size() + ", " +
-                tasks2.get(tasks2.size()-1).getName() + "\n" + getTaskCountSignature() + "\n" + LINE_BREAK);
+        Task newTask = new Event(eventName, startTime, endTime, tasks.size() + 1);
+        tasks.add(newTask);
+        System.out.println(LINE_BREAK + "Roger, I've added event at position no. " + tasks.size() + ", " +
+                tasks.get(tasks.size()-1).getName() + "\n" + getTaskCountSignature() + "\n" + LINE_BREAK);
         System.out.println();
     }
 
