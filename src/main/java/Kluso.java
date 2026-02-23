@@ -58,7 +58,7 @@ public class Kluso {
                     case MARK_STRING -> markTask(commandSegments[1]);
                     case UNMARK_STRING -> unmarkTask(commandSegments[1]);
                     case TODO_STRING -> addTodo(commandSegments[1]);
-                    //case DELETE_STRING -> deleteTask(commandSegments[1]);
+                    case DELETE_STRING -> deleteTask(commandSegments[1]);
                 }
             }
 
@@ -88,6 +88,16 @@ public class Kluso {
         //Display quit message
         System.out.println(LINE_BREAK + QUITTING_TEXT + LINE_BREAK);
         isReadyForInputs = false;
+    }
+
+    private static void deleteTask(String indexString) {
+        try {
+            int indexToDelete = Integer.parseInt(indexString);
+            System.out.println("delete " + indexToDelete);
+        } catch (NumberFormatException e) {
+            System.out.println("What you said after " + DELETE_STRING
+                    + " is invalid; I need a valid index integer!");
+        }
     }
 
     /**
@@ -132,8 +142,8 @@ public class Kluso {
                 System.out.println("There's no tasking with this index! Check back!");
             }
         } catch (NumberFormatException e) {
-            System.out.println("What you said after " + UNMARK_STRING
-                    + " is invalid; I need a valid index integer!");
+            System.out.println("What you said after " + MARK_STRING +
+                    " is invalid; I need a valid index integer!");
         }
     }
 
@@ -154,8 +164,8 @@ public class Kluso {
                 System.out.println("There's no tasking with this index! Check back!");
             }
         } catch (NumberFormatException e) {
-            System.out.println("What you said after " + MARK_STRING
-                    + " is invalid; I need a valid index integer!");
+            System.out.println("What you said after " + UNMARK_STRING +
+                    " is invalid; I need a valid index integer!");
         }
 
     }
@@ -231,12 +241,13 @@ public class Kluso {
                 if (arguments.isEmpty()) {
                     throw new IllegalArgumentException("You haven't given me an integer associated with a task!");
                 }
+                return (parts);
             case UNMARK_STRING:
                 // Check and throw an exception if the integer after mark is empty.
                 if (arguments.isEmpty()) {
                     throw new IllegalArgumentException("You haven't given me an integer associated with a task!");
                 }
-                return parts;
+                return (parts);
             case TODO_STRING:
                 if (arguments.isEmpty()) {
                     throw new IllegalArgumentException("I'm missing a name for the todo!");
@@ -259,11 +270,9 @@ public class Kluso {
                 if (deadlineName.isEmpty()) {
                     throw new IllegalArgumentException("You're missing the name of the deadline event!");
                 }
-
                 if (deadlineTime.isEmpty()) {
                     throw new IllegalArgumentException("You didn't give a time for the deadline event!");
                 }
-
                 return (new String[]{command, deadlineName, deadlineTime});
             case EVENT_STRING:
                 int startTimeIndex = arguments.indexOf("/from");
@@ -290,9 +299,12 @@ public class Kluso {
                     throw new IllegalArgumentException("You're missing the end time of the event, to be input" +
                             "after '/to' !");
                 }
-
                 return (new String[]{command, eventName, startTime, endTime});
-
+            case DELETE_STRING:
+                if (arguments.isEmpty()) {
+                    throw new IllegalArgumentException("You haven't given me an integer associated with a task!");
+                }
+                return (parts);
             // The case where a basic task is to be entered will be handled using the "default" case.
             default:
 
@@ -302,7 +314,7 @@ public class Kluso {
             }
         } catch (IllegalArgumentException e) {
             System.out.println("Problem! " + e.getMessage());
-            return new String[]{};
+            return (new String[]{});
         }
 
     }
