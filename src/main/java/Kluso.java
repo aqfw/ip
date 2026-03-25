@@ -120,9 +120,6 @@ public class Kluso {
      * Prints all tasks currently stored in the task list.
      */
     private static void listTasks() {
-        // Subtract 1 from taskCount to get the last index in the array where a Task is stored
-        //int lastIndex = taskCount - 1;
-
         // Style padding
         System.out.println(LINE_BREAK);
         System.out.println(LIST_HEADER);
@@ -142,8 +139,10 @@ public class Kluso {
         System.out.println(LINE_BREAK);
     }
 
+
     private static void markTask(String indexString) {
-        // Task marking logic, checking if a valid integer has been passed; Should be consolidated
+
+        // Task marking logic
         try {
             int indexToMark = Integer.parseInt(indexString);
 
@@ -163,9 +162,10 @@ public class Kluso {
         }
     }
 
+
     private static void unmarkTask(String indexString) {
 
-        // Task marking logic, checking if a valid integer has been passed; Should be consolidated
+        // Task unmarking logic
         try {
             int indexToUnmark = Integer.parseInt(indexString);
 
