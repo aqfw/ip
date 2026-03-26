@@ -1,3 +1,8 @@
+import java.io.File;
+import java.io.FileWriter;
+import java.io.PrintWriter;
+import java.io.IOException;
+
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -24,6 +29,9 @@ public class Kluso {
     static ArrayList<Task> tasks = new ArrayList<>();
     static boolean isReadyForInputs = true;
 
+    // Output file variables: folder ./data/ and file name kluso_task_list.txt
+    static final String SAVE_DIR = "data";
+    static final String SAVE_FILE = SAVE_DIR + File.separator + "kluso_task_list.txt";
 
     /**
      * Main method of the Kluso application.
@@ -31,7 +39,10 @@ public class Kluso {
      */
     public static void main(String[] args) {
 
-        //Print greeting text
+        // Load tasks from the previous Kluso session at the start of this session
+        loadTasksFromFile();
+
+        // Print greeting text
         System.out.println(LINE_BREAK + GREETING_TEXT + LINE_BREAK);
 
         // Open a new scanner stream
@@ -39,7 +50,7 @@ public class Kluso {
 
         // Execution block
         while (isReadyForInputs) {
-            
+
             // Read input and parse into command segments
             String input = scanner.nextLine();
             String[] commandSegments = parse(input);
@@ -106,6 +117,9 @@ public class Kluso {
                 System.out.println(LINE_BREAK + "Roger, I've removed this tasking:\n  " +
                         removedTask.readBack() + "\n" + getTaskCountSignature() + "\n" + LINE_BREAK);
 
+                // Saves the current list of tasks to the file SAVE_FILE
+                saveTasksToFile();
+
             } else {
                 System.out.println("There's no tasking with this index! Check back!");
             }
@@ -153,6 +167,9 @@ public class Kluso {
                 Task markedTask = tasks.get(indexToMark-1).markAsComplete();
                 tasks.set(indexToMark-1, markedTask);
                 System.out.println(tasks.get(indexToMark-1).readBack() + "\n" + LINE_BREAK);
+
+                // Saves the current list of tasks to the file SAVE_FILE
+                saveTasksToFile();
             } else {
                 System.out.println("There's no tasking with this index! Check back!");
             }
@@ -176,6 +193,9 @@ public class Kluso {
                 Task unmarkedTask = tasks.get(indexToUnmark -1).markAsIncomplete();
                 tasks.set(indexToUnmark -1, unmarkedTask);
                 System.out.println(tasks.get(indexToUnmark -1).readBack() + "\n" + LINE_BREAK);
+
+                // Saves the current list of tasks to the file SAVE_FILE
+                saveTasksToFile();
             } else {
                 System.out.println("There's no tasking with this index! Check back!");
             }
@@ -198,6 +218,9 @@ public class Kluso {
         System.out.println(LINE_BREAK + "Roger, I've added task at position no.: " + tasks.size() + ", " +
                 tasks.get(tasks.size()-1).getName() + "\n" + getTaskCountSignature() + "\n" + LINE_BREAK);
         System.out.println();
+
+        // Saves the current list of tasks to the file SAVE_FILE
+        saveTasksToFile();
     }
 
     private static void addTodo(String todoName) {
@@ -207,6 +230,9 @@ public class Kluso {
         System.out.println(LINE_BREAK + "Roger, I've added to-do at position no. " + tasks.size() + ", " +
                 tasks.get(tasks.size()-1).getName() + "\n" + getTaskCountSignature() + "\n" + LINE_BREAK);
         System.out.println();
+
+        // Saves the current list of tasks to the file SAVE_FILE
+        saveTasksToFile();
     }
 
     private static void addDeadline(String deadlineName, String deadlineTime) {
@@ -216,6 +242,9 @@ public class Kluso {
         System.out.println(LINE_BREAK + "Roger, I've added deadline at position no. " + tasks.size() + ", " +
                 tasks.get(tasks.size()-1).getName() + "\n" + getTaskCountSignature() + "\n" + LINE_BREAK);
         System.out.println();
+
+        // Saves the current list of tasks to the file SAVE_FILE
+        saveTasksToFile();
     }
 
     private static void addEvent(String eventName, String startTime, String endTime) {
@@ -224,6 +253,9 @@ public class Kluso {
         System.out.println(LINE_BREAK + "Roger, I've added event at position no. " + tasks.size() + ", " +
                 tasks.get(tasks.size()-1).getName() + "\n" + getTaskCountSignature() + "\n" + LINE_BREAK);
         System.out.println();
+
+        // Saves the current list of tasks to the file SAVE_FILE
+        saveTasksToFile();
     }
 
     private static String[] parse(String input) {
@@ -335,5 +367,57 @@ public class Kluso {
 
     }
 
+    /**
+     * Writes the current task list to ./data/kluso_task_list.txt.
+     * Creates ./data/ and the file itself if they do not exist.
+     *
+     */
+    public static void saveTasksToFile(){
+
+        //Create directory in which to save the list data, and check if it can be created
+        File dir = new File(SAVE_DIR);
+        if (!dir.exists() && !dir.mkdir()) {
+            System.out.println("Warning: could not create save directory.");
+            return;
+        }
+
+        File file = new File(SAVE_FILE);
+
+        //Create the file if it does not already exist
+        try {
+            if (!file.exists()) {
+                file.createNewFile();
+            }
+        } catch (IOException e) {
+            System.out.println("Warning: could not create kluso_task_list.txt" + e.getMessage());
+            return;
+        }
+
+        // Write the task list directly to the file, overwriting previous task list
+        try (PrintWriter writer = new PrintWriter(new FileWriter(file))) {
+            if (tasks.isEmpty()) {
+                writer.println("=empty tasking order=");
+            } else {
+                for (int i = 0; i < tasks.size(); i++) {
+                    int order = tasks.get(i).getAssignmentOrder();
+                    String line = order + ". " + tasks.get(i).readBack();
+                    writer.println(line);
+                }
+            }
+        } catch (IOException e) {
+            System.out.println("Warning: task list file or directory cannot be written to" + e.getMessage());
+        }
+    }
+
+    /** To do: write loadTasksFromFile
+     * function: Read the lines in the file, then populate the TaskList with them
+     * May need a separate map to feed into parser.
+     */
+    public static void loadTasksFromFile(){
+        return;
+    }
+
+
 }
+
 
