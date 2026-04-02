@@ -33,9 +33,23 @@ public class Kluso {
     static final String SAVE_DIR = "data";
     static final String SAVE_FILE = SAVE_DIR + File.separator + "kluso_task_list.txt";
 
+    // Indices into the ArrayList returned by decomposeLine; will require enum mapping later
+    static final int DECOMPOSED_TYPE = 0;
+    static final int DECOMPOSED_IS_COMPLETE = 1;
+    static final int DECOMPOSED_NAME = 2;
+    static final int DECOMPOSED_DEADLINE = 3;
+    static final int DECOMPOSED_START = 3;
+    static final int DECOMPOSED_END = 4;
+
+    // Task-type identifiers used in decomposeLine and reconstructTask
+    static final String DECOMPOSED_TYPE_TASK = "TASK";
+    static final String DECOMPOSED_TYPE_TODO = "TODO";
+    static final String DECOMPOSED_TYPE_DEADLINE = "DEADLINE";
+    static final String DECOMPOSED_TYPE_EVENT = "EVENT";
+
     /**
-     * Main method of the Kluso application.
-     * Opens a scanner stream, reads user input in a loop, and dispatches commands.
+     * Main method of the Kluso; loads saved data, reads new input and calls commands as needed.
+     * Relies on parse(String input) to decompose keyboard inputs for relevant methods
      */
     public static void main(String[] args) {
 
@@ -58,30 +72,30 @@ public class Kluso {
             // Handle each of the cases, differentiated according to the length of the input.
             if (commandSegments.length == 1) {
                 switch (commandSegments[0]) {
-                    case QUIT_STRING -> quitProgram();
-                    case LIST_STRING -> listTasks();
-                    default -> addTask(commandSegments[0]);
+                case QUIT_STRING -> quitProgram();
+                case LIST_STRING -> listTasks();
+                default -> addTask(commandSegments[0]);
                 }
             }
 
             if (commandSegments.length == 2) {
                 switch (commandSegments[0]) {
-                    case MARK_STRING -> markTask(commandSegments[1]);
-                    case UNMARK_STRING -> unmarkTask(commandSegments[1]);
-                    case TODO_STRING -> addTodo(commandSegments[1]);
-                    case DELETE_STRING -> deleteTask(commandSegments[1]);
+                case MARK_STRING -> markTask(commandSegments[1]);
+                case UNMARK_STRING -> unmarkTask(commandSegments[1]);
+                case TODO_STRING -> addTodo(commandSegments[1]);
+                case DELETE_STRING -> deleteTask(commandSegments[1]);
                 }
             }
 
             if (commandSegments.length == 3) {
                 switch (commandSegments[0]) {
-                    case DEADLINE_STRING -> addDeadline(commandSegments[1], commandSegments[2]);
+                case DEADLINE_STRING -> addDeadline(commandSegments[1], commandSegments[2]);
                 }
             }
 
             if (commandSegments.length == 4) {
                 switch (commandSegments[0]) {
-                    case EVENT_STRING -> addEvent(commandSegments[1], commandSegments[2], commandSegments[3]);
+                case EVENT_STRING -> addEvent(commandSegments[1], commandSegments[2], commandSegments[3]);
                 }
             }
 
@@ -93,7 +107,7 @@ public class Kluso {
     }
 
     /**
-     * Displays the quit message and stops the user's input loop.
+     * Displays the quit message and stops the main method's input loop.
      */
     private static void quitProgram() {
         //Display quit message
@@ -101,6 +115,9 @@ public class Kluso {
         isReadyForInputs = false;
     }
 
+    /**
+     * Deletes a task by number (taking in a String but requiring it to be a number)
+     */
     private static void deleteTask(String indexString) {
         try {
             int indexToDelete = Integer.parseInt(indexString);
@@ -131,7 +148,7 @@ public class Kluso {
     }
 
     /**
-     * Prints all tasks currently stored in the task list.
+     * Prints all tasks currently stored in the task list in the terminal.
      */
     private static void listTasks() {
         // Style padding
@@ -153,7 +170,9 @@ public class Kluso {
         System.out.println(LINE_BREAK);
     }
 
-
+    /**
+     * Marks a Task Object as complete (using object's methods), saving it, and returning it to tasks.
+     */
     private static void markTask(String indexString) {
 
         // Task marking logic
@@ -179,7 +198,9 @@ public class Kluso {
         }
     }
 
-
+    /**
+     * Unmarks a Task Object regardless (using object's methods), saving it, and returning it to tasks.
+     */
     private static void unmarkTask(String indexString) {
 
         // Task unmarking logic
@@ -206,11 +227,17 @@ public class Kluso {
 
     }
 
+    /**
+     * Helper method to just return in the terminal the number of tasks
+     */
     private static String getTaskCountSignature() {
         int count = tasks.size();
         return "I've got " + count + (count == 1 ? " tasking" : " taskings") + " on my order.";
     }
 
+    /**
+     * For the Task class, add a new Task to tasks ArrayList
+     */
     private static void addTask(String input) {
         // Create new Task object, add to array, echo the addition and increment taskCount counter
         Task newTask = new Task(input, tasks.size() + 1);
@@ -223,8 +250,11 @@ public class Kluso {
         saveTasksToFile();
     }
 
+    /**
+     * For the Todo class, create new Todo object, add to array, echo the addition and increment taskCount counter
+     */
     private static void addTodo(String todoName) {
-        // Create new Todo object, add to array, echo the addition and increment taskCount counter
+
         Task newTask = new Todo(todoName, tasks.size() + 1);
         tasks.add(newTask);
         System.out.println(LINE_BREAK + "Roger, I've added to-do at position no. " + tasks.size() + ", " +
@@ -235,6 +265,11 @@ public class Kluso {
         saveTasksToFile();
     }
 
+    /**
+     * Create new Deadline object, add to array, echo the addition and increment taskCount counter
+     * @param deadlineName
+     * @param deadlineTime
+     */
     private static void addDeadline(String deadlineName, String deadlineTime) {
         // Create new Deadline object, add to array, echo the addition and increment taskCount counter
         Task newTask = new Deadline(deadlineName, deadlineTime, tasks.size() + 1);
@@ -247,6 +282,12 @@ public class Kluso {
         saveTasksToFile();
     }
 
+    /**
+     * Create a new Event, and add it to tasks, and echo. Updates the saved text file.
+     * @param eventName
+     * @param startTime
+     * @param endTime
+     */
     private static void addEvent(String eventName, String startTime, String endTime) {
         Task newTask = new Event(eventName, startTime, endTime, tasks.size() + 1);
         tasks.add(newTask);
@@ -258,10 +299,14 @@ public class Kluso {
         saveTasksToFile();
     }
 
+    /**
+     * parse is used to comprehend a user's text inputs into components that commands can take in.
+     * @param input any keyboard string that the user inputs into the app
+     * @return a list of strings, with each string being each component of a command.
+     */
     private static String[] parse(String input) {
 
         try {
-
             // Check if input is null, if not try/catch exception
             if (input == null || input.isBlank()) {
 
@@ -409,15 +454,225 @@ public class Kluso {
         }
     }
 
-    /** To do: write loadTasksFromFile
-     * function: Read the lines in the file, then populate the TaskList with them
-     * May need a separate map to feed into parser.
+    /**
+     * Loads tasks by using the java.io libraries, using parseSaveLines to parse the inputs into objects
+     * to be recorded in tasks, by setting tasks to parseSaveLines's ArrayList Task output.
      */
     public static void loadTasksFromFile(){
-        return;
+
+        // Load the SAVE_FILE if it exists
+        File file = new File(SAVE_FILE);
+
+        //Catch case where either no file or no directory exists.
+        if (!file.exists()) {
+            System.out.println("No tasking order in my central computer's memory! I'll make a new one!");
+        }
+
+        // Read the file line by line, parse into objects, add objects into the "tasks" list
+        ArrayList<String> lines = new ArrayList<String>();
+        try (Scanner fileScanner = new Scanner(file)) {
+            while (fileScanner.hasNextLine()) {
+                lines.add(fileScanner.nextLine());
+            }
+        } catch (IOException e) {
+            System.out.println("The tasking order file is unreadable! " + e.getMessage());
+        }
+        tasks = parseSaveLines(lines);
     }
 
+    /**
+     * Takes the list of lines from the save file, goes through each line, strips extraneous parts, gets order
+     * And uses reconstructTask on each line to obtain a Task object to put into restoredTasks.
+     * @param lines
+     * @return
+     */
+    public static ArrayList<Task> parseSaveLines(ArrayList<String> lines) {
+        ArrayList<Task> restoredTasks = new ArrayList<Task>();
 
+        // Iteratively go through every line, parsing each into an object. Each run parses one line & object.
+        for (int i = 0; i < lines.size(); i++) {
+            String line = lines.get(i);
+
+            int dotIndex = line.indexOf(". ");
+            if (dotIndex == -1) {
+                continue; // This excludes any line that doesn't have a valid position number
+            }
+
+            String taskReadBack = line.substring(dotIndex + 2);
+
+            // This excludes any task output which does not start with "[ ]" or any 3 chars
+            if (taskReadBack.length() < 3) {
+                continue;
+            }
+
+            // Exclude any task output that doesn't start with the appropriate checkboxes by length.
+            // For parent Tasks the checkbox is at index 0-2
+            // For child classes it is at index 3-5, due to the type prefix (e.g. "[E]" for event).
+            String presumedCheckbox = taskReadBack.substring(0, 3);
+            boolean isChildClass = taskReadBack.length() >= 6 && taskReadBack.charAt(3) == '[';
+            String presumedChildCheckbox = (isChildClass ? taskReadBack.substring(3, 6) : "");
+            boolean hasValidCheckbox = presumedCheckbox.equals("[ ]") || presumedCheckbox.equals("[X]")
+                    || presumedChildCheckbox.equals("[ ]") || presumedChildCheckbox.equals("[X]");
+            if (!hasValidCheckbox) {
+                continue;
+            }
+
+            ArrayList<String> decomposedLine = decomposeLine(taskReadBack);
+
+            // Check and skip a line that decomposeLine fails to return a pattern for (may change to corrupt!)
+            if (decomposedLine == null) {
+                continue;
+            }
+
+            // Counter just to be able to number the tasks with the appropriate assignmentOrder
+            int assignmentOrder = restoredTasks.size() + 1;
+            Task restoredTask = reconstructTask(decomposedLine, assignmentOrder, line);
+
+            if (restoredTask != null) {
+                restoredTasks.add(restoredTask);
+            }
+        }
+        return restoredTasks;
+    }
+
+    /**
+     * Reconstructs a task from a decomposed line, by calling decomposedLine, then checking the case.
+     * relies on some static strings that will need to be enum'ed for ease of modification.
+     * @param decomposedLine
+     * @param assignmentOrder
+     * @param rawLine
+     * @return
+     */
+    // Will need to try a better default/non-readable task handling.
+    public static Task reconstructTask(ArrayList<String> decomposedLine, int assignmentOrder, String rawLine) {
+        boolean isComplete = Boolean.parseBoolean(decomposedLine.get(DECOMPOSED_IS_COMPLETE));
+        String name = decomposedLine.get(DECOMPOSED_NAME);
+
+        switch (decomposedLine.get(DECOMPOSED_TYPE)) {
+        case DECOMPOSED_TYPE_TASK:
+            return new Task(name, isComplete, assignmentOrder);
+        case DECOMPOSED_TYPE_TODO:
+            return new Todo(name, isComplete, assignmentOrder);
+        case DECOMPOSED_TYPE_DEADLINE:
+            return new Deadline(name, decomposedLine.get(DECOMPOSED_DEADLINE), isComplete, assignmentOrder);
+        case DECOMPOSED_TYPE_EVENT:
+            return new Event(name, decomposedLine.get(DECOMPOSED_START), decomposedLine.get(DECOMPOSED_END),
+                    isComplete, assignmentOrder);
+        default:
+            System.out.println("There's some data corruption here, the task is unreadable" + rawLine);
+            return null;
+        }
+    }
+
+    /**
+     * Decomposes the lines into segments that can be read by reconstructTask, by mapping characters.
+     * @param taskReadBack
+     * @return
+     */
+    public static ArrayList<String> decomposeLine(String taskReadBack) {
+
+        // Break the line string into components depending on whether Task or child class thereof
+        String taskType = new String();
+        String taskMarking = new String();
+        boolean isComplete = taskMarking.equals("[X]");
+        String taskContent = new String();
+
+        // Case where a line item is of the parent class Task
+        if (taskReadBack.charAt(3) != '[') {
+            taskType = DECOMPOSED_TYPE_TASK;
+            taskMarking = taskReadBack.substring(0, 3);
+            isComplete = taskMarking.equals("[X]");
+            taskContent = taskReadBack.substring(4);
+        }
+
+        // Case where a line item is of any child class of Task: map the file prefix to the appropriate constant
+        if (taskReadBack.charAt(3) == '[') {
+            String filePrefix = taskReadBack.substring(0, 3);
+            switch (filePrefix) {
+            case "[T]":
+                taskType = DECOMPOSED_TYPE_TODO;
+                break;
+            case "[D]":
+                taskType = DECOMPOSED_TYPE_DEADLINE;
+                break;
+            case "[E]":
+                taskType = DECOMPOSED_TYPE_EVENT;
+                break;
+            default:
+                return null;
+            }
+            taskMarking = taskReadBack.substring(3, 6);
+            isComplete = taskMarking.equals("[X]");
+            taskContent = taskReadBack.substring(7);
+        }
+
+        // Build the decomposed line from components
+        ArrayList<String> decomposedLine = new ArrayList<String>();
+
+        // Parse according to type, adding each component of the decomposed line.
+        switch (taskType) {
+        case DECOMPOSED_TYPE_TASK:
+            //Task: [X] some task
+            decomposedLine.add(DECOMPOSED_TYPE_TASK);
+            decomposedLine.add(Boolean.toString(isComplete));
+            decomposedLine.add(taskContent);
+            return decomposedLine;
+        case DECOMPOSED_TYPE_TODO:
+            // Todo: [T][X] some todo
+            decomposedLine.add(DECOMPOSED_TYPE_TODO);
+            decomposedLine.add(Boolean.toString(isComplete));
+            decomposedLine.add(taskContent);
+            return decomposedLine;
+        case DECOMPOSED_TYPE_DEADLINE:
+            // Deadline: [D][ ] some deadline(time)
+
+            int deadlineOpenBracket = taskContent.indexOf('(');
+            int deadlineCloseBracket = taskContent.lastIndexOf(')');
+
+            if (deadlineOpenBracket == -1 || deadlineCloseBracket == -1
+                    || deadlineCloseBracket <= deadlineOpenBracket) {
+                return null;
+            }
+
+            String deadlineName = taskContent.substring(0, deadlineOpenBracket).trim();
+            String deadlineTime = taskContent.substring(deadlineOpenBracket + 1, deadlineCloseBracket).trim();
+
+            decomposedLine.add(DECOMPOSED_TYPE_DEADLINE);
+            decomposedLine.add(Boolean.toString(isComplete));
+            decomposedLine.add(deadlineName);
+            decomposedLine.add(deadlineTime);
+            return decomposedLine;
+        case DECOMPOSED_TYPE_EVENT:
+            // Event: [E][ ] some event(from: 0130, to: 0330)
+            int eventOpenBracket = taskContent.indexOf('(');
+            int eventCloseBracket = taskContent.lastIndexOf(')');
+
+            if (eventOpenBracket == -1 || eventCloseBracket == -1
+                    || eventCloseBracket <= eventOpenBracket) {
+                return null;
+            }
+
+            String eventName = taskContent.substring(0, eventOpenBracket).trim();
+            String eventTimes = taskContent.substring(eventOpenBracket + 1, eventCloseBracket).trim();
+
+            // eventTimes is "from: startTime, to: endTime"
+            int fromIndex = eventTimes.indexOf("from: ");
+            int toIndex = eventTimes.indexOf(", to: ");
+            if (fromIndex == -1 || toIndex == -1) {
+                return null;
+            }
+
+            String startTime = eventTimes.substring(fromIndex + 6, toIndex).trim();
+            String endTime = eventTimes.substring(toIndex + 6).trim();
+
+            decomposedLine.add(DECOMPOSED_TYPE_EVENT);
+            decomposedLine.add(Boolean.toString(isComplete));
+            decomposedLine.add(eventName);
+            decomposedLine.add(startTime);
+            decomposedLine.add(endTime);
+            return decomposedLine;
+        default:
+            return null;
+        }
+    }
 }
-
-
