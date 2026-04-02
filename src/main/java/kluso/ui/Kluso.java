@@ -551,7 +551,8 @@ public class Kluso {
      * @return
      */
     // Will need to try a better default/non-readable task handling.
-    public static Task reconstructTask(ArrayList<String> decomposedLine, int assignmentOrder, String rawLine) {
+    public static Task reconstructTask(ArrayList<String> decomposedLine, int assignmentOrder,
+                                       String rawLine) {
         boolean isComplete = Boolean.parseBoolean(decomposedLine.get(DECOMPOSED_IS_COMPLETE));
         String name = decomposedLine.get(DECOMPOSED_NAME);
 
@@ -561,8 +562,21 @@ public class Kluso {
         case DECOMPOSED_TYPE_TODO:
             return new Todo(name, isComplete, assignmentOrder);
         case DECOMPOSED_TYPE_DEADLINE:
+            String deadlineString = decomposedLine.get(DECOMPOSED_DEADLINE);
+            if (deadlineString.isBlank()) {
+                System.out.println("One old data file's deadline string is blank, which I'm skipping: " +
+                        rawLine);
+                return null;
+            }
             return new Deadline(name, decomposedLine.get(DECOMPOSED_DEADLINE), isComplete, assignmentOrder);
         case DECOMPOSED_TYPE_EVENT:
+            String eventStartString = decomposedLine.get(DECOMPOSED_START);
+            String eventEndString = decomposedLine.get(DECOMPOSED_END);
+            if (eventStartString.isBlank() || eventEndString.isBlank()) {
+                System.out.println("One old data file's event start or end string is blank;" +
+                        "I'm skipping it: " + rawLine);
+                return null;
+            }
             return new Event(name, decomposedLine.get(DECOMPOSED_START), decomposedLine.get(DECOMPOSED_END),
                     isComplete, assignmentOrder);
         default:
@@ -632,7 +646,6 @@ public class Kluso {
             return decomposedLine;
         case DECOMPOSED_TYPE_DEADLINE:
             // kluso.objects.Deadline: [D][ ] some deadline(time)
-
             int deadlineOpenBracket = taskContent.indexOf('(');
             int deadlineCloseBracket = taskContent.lastIndexOf(')');
 
