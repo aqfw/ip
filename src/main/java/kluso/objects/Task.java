@@ -1,3 +1,5 @@
+package kluso.objects;
+
 public class Task {
     protected String name;
     protected boolean isComplete = false;
@@ -5,7 +7,7 @@ public class Task {
     protected String[] marks = {"[ ]", "[X]"};
 
     public Task() {
-        this.name = "empty unnamed Task";
+        this.name = "empty unnamed kluso.objects.Task";
     }
 
     public Task(String name, int assignmentOrder) {
@@ -31,8 +33,8 @@ public class Task {
         return (isComplete ? marks[1]: marks[0]) + " " + name;
     }
 
-    // This is a side effect free way of resetting the assignment order by returning a new instance of Todo with an
-    // updated order, used in Kluso to set orders after a deletion.
+    // This is a side effect free way of resetting the assignment order by returning a new instance of kluso.objects.Todo with an
+    // updated order, used in kluso.ui.Kluso to set orders after a deletion.
     public Task reassignOrder(int newOrder) {
         return new Task(this.name, this.isComplete, newOrder);
     }

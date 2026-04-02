@@ -1,3 +1,10 @@
+package kluso.ui;
+
+import kluso.objects.Deadline;
+import kluso.objects.Event;
+import kluso.objects.Task;
+import kluso.objects.Todo;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.io.PrintWriter;
@@ -41,19 +48,19 @@ public class Kluso {
     static final int DECOMPOSED_START = 3;
     static final int DECOMPOSED_END = 4;
 
-    // Task-type identifiers used in decomposeLine and reconstructTask
+    // kluso.objects.Task-type identifiers used in decomposeLine and reconstructTask
     static final String DECOMPOSED_TYPE_TASK = "TASK";
     static final String DECOMPOSED_TYPE_TODO = "TODO";
     static final String DECOMPOSED_TYPE_DEADLINE = "DEADLINE";
     static final String DECOMPOSED_TYPE_EVENT = "EVENT";
 
     /**
-     * Main method of the Kluso; loads saved data, reads new input and calls commands as needed.
+     * Main method of the kluso.ui.Kluso; loads saved data, reads new input and calls commands as needed.
      * Relies on parse(String input) to decompose keyboard inputs for relevant methods
      */
     public static void main(String[] args) {
 
-        // Load tasks from the previous Kluso session at the start of this session
+        // Load tasks from the previous kluso.ui.Kluso session at the start of this session
         loadTasksFromFile();
 
         // Print greeting text
@@ -126,7 +133,7 @@ public class Kluso {
                 Task removedTask = tasks.remove(indexToDelete - 1);
 
                 // Shifts all entries after the removed entry in the list "up" by one index by inserting
-                // new Task entries into the tasks list
+                // new kluso.objects.Task entries into the tasks list
                 for (int i = indexToDelete - 1; i < tasks.size(); i++) {
                     tasks.set(i, tasks.get(i).reassignOrder(i+1));
                 }
@@ -160,7 +167,7 @@ public class Kluso {
             System.out.println("No taskings!");
         }
 
-        // Iteratively print the Tasks in the console in the order in which each Task was assigned
+        // Iteratively print the Tasks in the console in the order in which each kluso.objects.Task was assigned
         for (int i = 0; i < tasks.size(); i++) {
             String taskNumber = String.valueOf(tasks.get(i).getAssignmentOrder());
             System.out.println(taskNumber + ". " + tasks.get(i).readBack());
@@ -171,11 +178,11 @@ public class Kluso {
     }
 
     /**
-     * Marks a Task Object as complete (using object's methods), saving it, and returning it to tasks.
+     * Marks a kluso.objects.Task Object as complete (using object's methods), saving it, and returning it to tasks.
      */
     private static void markTask(String indexString) {
 
-        // Task marking logic
+        // kluso.objects.Task marking logic
         try {
             int indexToMark = Integer.parseInt(indexString);
 
@@ -199,11 +206,11 @@ public class Kluso {
     }
 
     /**
-     * Unmarks a Task Object regardless (using object's methods), saving it, and returning it to tasks.
+     * Unmarks a kluso.objects.Task Object regardless (using object's methods), saving it, and returning it to tasks.
      */
     private static void unmarkTask(String indexString) {
 
-        // Task unmarking logic
+        // kluso.objects.Task unmarking logic
         try {
             int indexToUnmark = Integer.parseInt(indexString);
 
@@ -236,10 +243,10 @@ public class Kluso {
     }
 
     /**
-     * For the Task class, add a new Task to tasks ArrayList
+     * For the kluso.objects.Task class, add a new kluso.objects.Task to tasks ArrayList
      */
     private static void addTask(String input) {
-        // Create new Task object, add to array, echo the addition and increment taskCount counter
+        // Create new kluso.objects.Task object, add to array, echo the addition and increment taskCount counter
         Task newTask = new Task(input, tasks.size() + 1);
         tasks.add(newTask);
         System.out.println(LINE_BREAK + "Roger, I've added task at position no.: " + tasks.size() + ", " +
@@ -251,7 +258,7 @@ public class Kluso {
     }
 
     /**
-     * For the Todo class, create new Todo object, add to array, echo the addition and increment taskCount counter
+     * For the kluso.objects.Todo class, create new kluso.objects.Todo object, add to array, echo the addition and increment taskCount counter
      */
     private static void addTodo(String todoName) {
 
@@ -266,12 +273,12 @@ public class Kluso {
     }
 
     /**
-     * Create new Deadline object, add to array, echo the addition and increment taskCount counter
+     * Create new kluso.objects.Deadline object, add to array, echo the addition and increment taskCount counter
      * @param deadlineName
      * @param deadlineTime
      */
     private static void addDeadline(String deadlineName, String deadlineTime) {
-        // Create new Deadline object, add to array, echo the addition and increment taskCount counter
+        // Create new kluso.objects.Deadline object, add to array, echo the addition and increment taskCount counter
         Task newTask = new Deadline(deadlineName, deadlineTime, tasks.size() + 1);
         tasks.add(newTask);
         System.out.println(LINE_BREAK + "Roger, I've added deadline at position no. " + tasks.size() + ", " +
@@ -283,7 +290,7 @@ public class Kluso {
     }
 
     /**
-     * Create a new Event, and add it to tasks, and echo. Updates the saved text file.
+     * Create a new kluso.objects.Event, and add it to tasks, and echo. Updates the saved text file.
      * @param eventName
      * @param startTime
      * @param endTime
@@ -456,7 +463,7 @@ public class Kluso {
 
     /**
      * Loads tasks by using the java.io libraries, using parseSaveLines to parse the inputs into objects
-     * to be recorded in tasks, by setting tasks to parseSaveLines's ArrayList Task output.
+     * to be recorded in tasks, by setting tasks to parseSaveLines's ArrayList kluso.objects.Task output.
      */
     public static void loadTasksFromFile(){
 
@@ -482,7 +489,7 @@ public class Kluso {
 
     /**
      * Takes the list of lines from the save file, goes through each line, strips extraneous parts, gets order
-     * And uses reconstructTask on each line to obtain a Task object to put into restoredTasks.
+     * And uses reconstructTask on each line to obtain a kluso.objects.Task object to put into restoredTasks.
      * @param lines
      * @return
      */
@@ -571,13 +578,13 @@ public class Kluso {
      */
     public static ArrayList<String> decomposeLine(String taskReadBack) {
 
-        // Break the line string into components depending on whether Task or child class thereof
+        // Break the line string into components depending on whether kluso.objects.Task or child class thereof
         String taskType = new String();
         String taskMarking = new String();
         boolean isComplete = taskMarking.equals("[X]");
         String taskContent = new String();
 
-        // Case where a line item is of the parent class Task
+        // Case where a line item is of the parent class kluso.objects.Task
         if (taskReadBack.charAt(3) != '[') {
             taskType = DECOMPOSED_TYPE_TASK;
             taskMarking = taskReadBack.substring(0, 3);
@@ -585,7 +592,7 @@ public class Kluso {
             taskContent = taskReadBack.substring(4);
         }
 
-        // Case where a line item is of any child class of Task: map the file prefix to the appropriate constant
+        // Case where a line item is of any child class of kluso.objects.Task: map the file prefix to the appropriate constant
         if (taskReadBack.charAt(3) == '[') {
             String filePrefix = taskReadBack.substring(0, 3);
             switch (filePrefix) {
@@ -612,19 +619,19 @@ public class Kluso {
         // Parse according to type, adding each component of the decomposed line.
         switch (taskType) {
         case DECOMPOSED_TYPE_TASK:
-            //Task: [X] some task
+            //kluso.objects.Task: [X] some task
             decomposedLine.add(DECOMPOSED_TYPE_TASK);
             decomposedLine.add(Boolean.toString(isComplete));
             decomposedLine.add(taskContent);
             return decomposedLine;
         case DECOMPOSED_TYPE_TODO:
-            // Todo: [T][X] some todo
+            // kluso.objects.Todo: [T][X] some todo
             decomposedLine.add(DECOMPOSED_TYPE_TODO);
             decomposedLine.add(Boolean.toString(isComplete));
             decomposedLine.add(taskContent);
             return decomposedLine;
         case DECOMPOSED_TYPE_DEADLINE:
-            // Deadline: [D][ ] some deadline(time)
+            // kluso.objects.Deadline: [D][ ] some deadline(time)
 
             int deadlineOpenBracket = taskContent.indexOf('(');
             int deadlineCloseBracket = taskContent.lastIndexOf(')');
@@ -643,7 +650,7 @@ public class Kluso {
             decomposedLine.add(deadlineTime);
             return decomposedLine;
         case DECOMPOSED_TYPE_EVENT:
-            // Event: [E][ ] some event(from: 0130, to: 0330)
+            // kluso.objects.Event: [E][ ] some event(from: 0130, to: 0330)
             int eventOpenBracket = taskContent.indexOf('(');
             int eventCloseBracket = taskContent.lastIndexOf(')');
 

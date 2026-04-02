@@ -1,0 +1,5 @@
+1. [X] go north
+2. [ ] kill migs
+3. [E][X] refuel(from: 0144, to: 0159)
+4. [D][X] rtb(0300)
+5. [T][X] eat rations

@@ -1,3 +1,5 @@
+package kluso.objects;
+
 public class Event extends Task {
 
     static final String taskType = "[E]";
@@ -6,7 +8,7 @@ public class Event extends Task {
 
     public Event() {
         super();
-        this.name = "empty unnamed Event";
+        this.name = "empty unnamed kluso.objects.Event";
     }
 
     public Event(String name, String startTime, String endTime, int assignmentOrder) {
@@ -37,8 +39,8 @@ public class Event extends Task {
                 ", to: " + endTime + ")";
     }
 
-    // This is a side effect free way of resetting the assignment order by returning a new instance of Event
-    // with an updated order, used in Kluso to set orders after a deletion.
+    // This is a side effect free way of resetting the assignment order by returning a new instance of kluso.objects.Event
+    // with an updated order, used in kluso.ui.Kluso to set orders after a deletion.
     @Override
     public Event reassignOrder(int newOrder) {
         return new Event(this.name, this.startTime, this.endTime, this.isComplete, newOrder);

@@ -1,3 +1,5 @@
+package kluso.objects;
+
 public class Deadline extends Task {
 
     static final String taskType = "[D]";
@@ -5,7 +7,7 @@ public class Deadline extends Task {
 
     public Deadline() {
         super();
-        this.name = "empty unnamed Deadline";
+        this.name = "empty unnamed kluso.objects.Deadline";
     }
 
     public Deadline(String name, String deadline, int assignmentOrder) {
@@ -33,8 +35,8 @@ public class Deadline extends Task {
         return (taskType + (isComplete ? marks[1]: marks[0])) + " " + name + "(" + deadline + ")";
     }
 
-    // This is a side effect free way of resetting the assignment order by returning a new instance of Deadline
-    // with an updated order, used in Kluso to set orders after a deletion.
+    // This is a side effect free way of resetting the assignment order by returning a new instance of kluso.objects.Deadline
+    // with an updated order, used in kluso.ui.Kluso to set orders after a deletion.
     @Override
     public Deadline reassignOrder(int newOrder) {
         return new Deadline(this.name, this.deadline, this.isComplete, newOrder);
